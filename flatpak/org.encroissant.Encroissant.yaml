@@ -1,0 +1,52 @@
+app-id: org.encroissant.Encroissant
+runtime: org.gnome.Platform
+runtime-version: '50'
+sdk: org.gnome.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+  - org.freedesktop.Sdk.Extension.node20
+command: en-croissant
+
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/node20/bin:/run/build/Encroissant/corepack-bin
+  env:
+    CARGO_HOME: /run/build/Encroissant/cargo
+    # CARGO_NET_OFFLINE: 'true'
+
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  - --share=network
+  - --filesystem=xdg-data/en-croissant:create
+
+modules:
+  - name: Encroissant
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/node20/bin:/run/build/Encroissant/npm-global/bin
+      build-args:
+        - --share=network
+
+    build-commands:
+      - mkdir -p /run/build/Encroissant/npm-global
+      - npm install -g --prefix=/run/build/Encroissant/npm-global pnpm@9.0
+      - mkdir -p .cargo
+      - cp ./src-tauri/Cargo.toml .cargo/config.toml
+      - pnpm config set store-dir $PWD/.pnpm-store
+      - pnpm install 
+      - pnpm run build
+      - install -Dm755 ./src-tauri/target/release/en-croissant /app/bin/en-croissant
+      - install -Dm644 ./flatpak/logo.png /app/share/icons/hicolor/128x128/apps/org.encroissant.Encroissant.png
+      - install -Dm644 ./flatpak/org.encroissant.Encroissant.desktop /app/share/applications/org.encroissant.Encroissant.desktop
+      - install -Dm644 ./flatpak/org.encroissant.Encroissant.metainfo.xml /app/share/metainfo/org.encroissant.Encroissant.metainfo.xml
+
+    sources:
+      - type: dir
+        path: ..
+        skip:
+          - .git
+          - .flatpak-builder
+          - node_modules
+          - target

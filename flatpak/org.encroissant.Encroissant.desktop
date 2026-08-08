@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=EnCroissant
+Comment=Chess
+Categories=Education;Amusement;
+
+Icon=/app/share/icons/hicolor/128x128/apps/org.encroissant.Encroissant.png
+Exec=/app/bin/en-croissant
+Terminal=false

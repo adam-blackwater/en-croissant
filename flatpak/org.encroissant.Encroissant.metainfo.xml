@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.encroissant.Encroissant</id>
+  
+  <name>EnCroissant</name>
+  <summary>Chess</summary>
+  
+  <metadata_license>MIT</metadata_license>
+  <project_license>CC-BY-3.0</project_license>
+  
+  <description>
+    <p>
+      Chess application
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">org.encroissant.Encroissant.desktop</launchable>
+</component>
